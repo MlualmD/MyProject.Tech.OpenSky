@@ -227,6 +227,7 @@
             this.Left.Name = "Left";
             this.Left.Size = new System.Drawing.Size(63, 38);
             this.Left.TabIndex = 17;
+            this.Left.Text = "45.8389";
             // 
             // Right
             // 
@@ -235,6 +236,7 @@
             this.Right.Name = "Right";
             this.Right.Size = new System.Drawing.Size(63, 38);
             this.Right.TabIndex = 18;
+            this.Right.Text = "47.8229";
             // 
             // Top
             // 
@@ -243,6 +245,7 @@
             this.Top.Name = "Top";
             this.Top.Size = new System.Drawing.Size(63, 38);
             this.Top.TabIndex = 19;
+            this.Top.Text = "5.9962";
             // 
             // Bouttm
             // 
@@ -251,6 +254,7 @@
             this.Bouttm.Name = "Bouttm";
             this.Bouttm.Size = new System.Drawing.Size(63, 38);
             this.Bouttm.TabIndex = 20;
+            this.Bouttm.Text = "10.5226";
             // 
             // Refresh
             // 
@@ -358,11 +362,11 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox Left;
-        private System.Windows.Forms.TextBox Right;
-        private System.Windows.Forms.TextBox Top;
+        private new System.Windows.Forms.TextBox Left;
+        private new System.Windows.Forms.TextBox Right;
+        private new System.Windows.Forms.TextBox Top;
         private System.Windows.Forms.TextBox Bouttm;
-        private System.Windows.Forms.Button Refresh;
+        private new System.Windows.Forms.Button Refresh;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;

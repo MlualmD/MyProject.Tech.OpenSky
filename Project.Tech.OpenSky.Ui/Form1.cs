@@ -27,6 +27,7 @@ namespace Project.Tech.OpenSky.Ui
         {
             request.HandlerEventOpenSkyUpdate += HttpHandlerUpdate;
             request.AutoRequset();
+            
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -41,77 +42,100 @@ namespace Project.Tech.OpenSky.Ui
             request.HandlerEventStopAutoRunning += StopToRunAtou;
             request.StopRunning();
         }
+        private async void Refresh_Click(object sender, EventArgs e)
+        {
+            float left = float.Parse(Left.Text);
+            float right = float.Parse(Right.Text);
+            float top = float.Parse(Top.Text);
+            float bouttm = float.Parse(Bouttm.Text);
+
+            List<OpenSkyDetails> DataCountry = await request.FindCountryWithCoordinates(left, top, right, bouttm);
+            listView2.Clear();
+            listView2.View = View.Details;
+            listView2.Columns.Add("flights", 250);
+            for (int i = 0; i < DataCountry.Count; i++)
+            {
+                listView2.Items.Add(new ListViewItem(new string[] { $"ican 24:{DataCountry[i].icao24}, origin_country:{DataCountry[i].origin_country}" }));
+
+            }
+        }
+
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
             listView2.Clear();
             listView2.View = View.Details;
-            listView2.Columns.Add("Flights", 150);
+            listView2.Columns.Add("Flights", 250);
             string countryName = listView1.SelectedItems[0].SubItems[0].Text;
 
             for (int i = 0; i < request.AllDataOpenSkeyDetails.Count; i++)
             {
                 if (request.AllDataOpenSkeyDetails[i].origin_country.ToString() == countryName)
                 {
-                    listView2.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].icao24 + "," + request.AllDataOpenSkeyDetails[i].origin_country }));
-
+                    listView2.Items.Add(new ListViewItem(new string[] { $"ican 24:{request.AllDataOpenSkeyDetails[i].icao24}, origin_country:{request.AllDataOpenSkeyDetails[i].origin_country}" }));
                 }
             };
         }
         private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            listView3.Clear();
-            listView3.View = View.Details;
-            listView3.Columns.Add("List Details", 150);
-            var numberFlight = listView2.SelectedItems[0].SubItems[0].Text;
-            for (int i = 0; i < request.AllDataOpenSkeyDetails.Count; i++)
+            listView3.Invoke(new Action(() =>
             {
-                if (request.AllDataOpenSkeyDetails[i].icao24 != numberFlight.Split(',')[0])
+                listView3.Clear();
+                listView3.View = View.Details;
+                listView3.Columns.Add("List Details", 250);
+                var numberFlight = listView2.SelectedItems[0].SubItems[0].Text;
+                for (int i = 0; i < request.AllDataOpenSkeyDetails.Count; i++)
                 {
-                    continue;
-                }
-                listView3.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].icao24 }));
-                listView3.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].origin_country }));
-                listView3.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].longitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].latitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].baro_altitude.ToString() }));
-                break;
-            };
+                    var splitIcao24 = numberFlight.Split(':', ',')[1];
+                    if (request.AllDataOpenSkeyDetails[i].icao24 != splitIcao24)
+                    {
+                        continue;
+                    }
+                    listView3.Items.Add(new ListViewItem(new string[] { $"icao24:{request.AllDataOpenSkeyDetails[i].icao24 }" }));
+                    listView3.Items.Add(new ListViewItem(new string[] { $"origin_country:{request.AllDataOpenSkeyDetails[i].origin_country }" }));
+                    listView3.Items.Add(new ListViewItem(new string[] { $"longitude{request.AllDataOpenSkeyDetails[i].longitude}" }));
+                    listView3.Items.Add(new ListViewItem(new string[] { $"latitude{request.AllDataOpenSkeyDetails[i].latitude}"}));
+                    listView3.Items.Add(new ListViewItem(new string[] { $"baro_altitude{request.AllDataOpenSkeyDetails[i].baro_altitude}" }));
+                    break;
+                };
+            }));
+           
         }
         private void listView4_MouseClick(object sender, MouseEventArgs e)
         {
             listView2.Clear();
             listView2.View = View.Details;
-            listView2.Columns.Add("Flights", 150);
+            listView2.Columns.Add("Flights", 250);
             var countryName = listView4.SelectedItems[0].SubItems[0].Text;
-
             for (int i = 0; i < request.AllDataOpenSkeyDetails.Count; i++)
             {
                 if (request.AllDataOpenSkeyDetails[i].origin_country.ToString() == countryName)
                 {
-                    listView2.Items.Add(new ListViewItem(new string[] { request.AllDataOpenSkeyDetails[i].icao24 + "," + request.AllDataOpenSkeyDetails[i].origin_country }));
+                    listView2.Items.Add(new ListViewItem(new string[] { $"ican 24:{request.AllDataOpenSkeyDetails[i].icao24}, origin_country:{request.AllDataOpenSkeyDetails[i].origin_country}" }));
 
                 }
             };
         }
+       
+
 
         private void ShowFiveTopCountriesUI()
         {
             listView4.Clear();
             listView4.View = View.Details;
-            listView4.Columns.Add("Top 5 Countries", 100);
+            listView4.Columns.Add("Top 5 Countries", 250);
             var nameCountry = request.FiveTopFlights();
             for (int i = 0; i < nameCountry.Count; i++)
             {
                 listView4.Items.Add(new ListViewItem(new string[] { nameCountry[i] }));
             }
         }
-        private void ShowCountriesUI()
+        private async void ShowCountriesUI()
         {
             listView1.Clear();
             listView1.View = View.Details;
-            listView1.Columns.Add("List All Name Countries", 100);
-            var listscountriesName = request.GetAllCountries();
+            listView1.Columns.Add("List All Name Countries", 250);
+            var listscountriesName = await request.GetAllCountries();
             for (int i = 0; i < listscountriesName.Count; i++)
             {
                 listView1.Items.Add(new ListViewItem(new string[] { listscountriesName[i].ToString() }));
@@ -122,15 +146,15 @@ namespace Project.Tech.OpenSky.Ui
 
             listView3.Clear();
             listView3.View = View.Details;
-            listView3.Columns.Add("List Details", 100);
+            listView3.Columns.Add("Fligt Details", 250);
             List<OpenSkyDetails> LowsetFlight = request.LowsetFlightDetails();
             for (int i = 0; i < LowsetFlight.Count; i++)
             {
-                listView3.Items.Add(new ListViewItem(new string[] { LowsetFlight[i].icao24 }));
-                listView3.Items.Add(new ListViewItem(new string[] { LowsetFlight[i].origin_country }));
-                listView3.Items.Add(new ListViewItem(new string[] { LowsetFlight[i].longitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { LowsetFlight[i].latitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { LowsetFlight[i].baro_altitude.ToString() }));
+                listView3.Items.Add(new ListViewItem(new string[] {$"icao24:{LowsetFlight[i].icao24}" }));
+                listView3.Items.Add(new ListViewItem(new string[] { $"origin_country:{LowsetFlight[i].origin_country}"}));
+                listView3.Items.Add(new ListViewItem(new string[] { $"longitude:{LowsetFlight[i].longitude}" }));
+                listView3.Items.Add(new ListViewItem(new string[] { $"latitude{LowsetFlight[i].latitude}" }));
+                listView3.Items.Add(new ListViewItem(new string[] { $"baro_altitude{LowsetFlight[i].baro_altitude}" }));
             }
 
         }
@@ -139,19 +163,18 @@ namespace Project.Tech.OpenSky.Ui
 
             listView3.Clear();
             listView3.View = View.Details;
-            listView3.Columns.Add("List Details", 100);
+            listView3.Columns.Add("Flight Details", 250);
             List<OpenSkyDetails> HighetFlight = request.HighetFlightDetails();
-            for (int i = 0; i < HighetFlight.Count; i++)
+            foreach (OpenSkyDetails Flight in HighetFlight)
             {
-                listView3.Items.Add(new ListViewItem(new string[] { HighetFlight[i].icao24 }));
-                listView3.Items.Add(new ListViewItem(new string[] { HighetFlight[i].origin_country }));
-                listView3.Items.Add(new ListViewItem(new string[] { HighetFlight[i].longitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { HighetFlight[i].latitude.ToString() }));
-                listView3.Items.Add(new ListViewItem(new string[] { HighetFlight[i].baro_altitude.ToString() }));
+                listView3.Items.Add(new ListViewItem(new string[] { $"icao24:{Flight.icao24}"}));
+                listView3.Items.Add(new ListViewItem(new string[] { $"origin_country:{Flight.origin_country}"}));
+                listView3.Items.Add(new ListViewItem(new string[] { $"longitude:{Flight.longitude}"}));
+                listView3.Items.Add(new ListViewItem(new string[] { $"latitude:{Flight.latitude}"}));
+                listView3.Items.Add(new ListViewItem(new string[] { $"baro_altitude:{Flight.baro_altitude}"}));
             }
 
         }
-
         private void HttpHandlerUpdate()
         {
 
@@ -190,23 +213,9 @@ namespace Project.Tech.OpenSky.Ui
             request.Running = false;
             MessageBox.Show("Stopping The Program");
         }
+      
 
-        private void Refresh_Click(object sender, EventArgs e)
-        {
-            float left = float.Parse(Left.Text);
-            float right = float.Parse(Right.Text);
-            float top = float.Parse(Top.Text);
-            float bouttm = float.Parse(Bouttm.Text);
-            List<string> nameCountry = request.FindCountryWithCoordinates(left, top, right, bouttm);
-
-            listView1.Clear();
-            listView1.View = View.Details;
-            listView1.Columns.Add("List Details", 100);
-            for (int i = 0; i < nameCountry.Count; i++)
-            {
-                listView1.Items.Add(new ListViewItem(new string[] { nameCountry[i] }));
-            }
-        }
+       
     }
 
 }

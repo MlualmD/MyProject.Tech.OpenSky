@@ -48,7 +48,7 @@ namespace Project.Tech.OpenSky.Entities
                    {
 
                        OpenSkyDetails oneFligth = new OpenSkyDetails(OneFlight[0], OneFlight[2], OneFlight[5], OneFlight[6], OneFlight[7]);
-
+                       if(oneFligth.origin_country!="")
                        AllDataOpenSkeyDetails.Add(oneFligth);
                    }
                    datetime = DateTime.Now;
@@ -58,9 +58,12 @@ namespace Project.Tech.OpenSky.Entities
            });
 
         }
-        public List<string> GetAllCountries()
+        public Task<List<string>> GetAllCountries()
         {
-            return AllDataOpenSkeyDetails.Select(s => s.origin_country).Distinct().ToList();
+            return Task.Factory.StartNew(() =>
+            {
+              return  AllDataOpenSkeyDetails.OrderBy(x=>x.origin_country).Select(s => s.origin_country).Distinct().ToList();
+            });
         }
         public int LengthCountries()
         {
@@ -68,6 +71,7 @@ namespace Project.Tech.OpenSky.Entities
         }
         public List<OpenSkyDetails> LowsetFlightDetails()
         {
+
             return AllDataOpenSkeyDetails.OrderBy(s => s.baro_altitude).Take(1).ToList();
         }
         public List<OpenSkyDetails> HighetFlightDetails()
@@ -98,18 +102,13 @@ namespace Project.Tech.OpenSky.Entities
         {
             HandlerEventStopAutoRunning();
         }
-        public List<string> FindCountryWithCoordinates(float lamin, float lomin, float lamax, float lomax)
+        public Task<List<OpenSkyDetails>> FindCountryWithCoordinates(float lamin, float lomin, float lamax, float lomax)
         {
-            List<string> Listcountry = new List<string>();
-
-            foreach (OpenSkyDetails corrdinates in AllDataOpenSkeyDetails)
-            {
-                if(corrdinates.latitude > lamin && corrdinates.longitude<lomin && corrdinates.latitude > lamax && corrdinates.longitude < lomax)
-                {
-                    Listcountry.Add(corrdinates.origin_country);
-                }
-            }
-            return Listcountry;
+           return Task.Factory.StartNew(() => {
+               return (from OpenSkyDetails corrdinates in AllDataOpenSkeyDetails.OrderBy(x => x.origin_country)
+                        where corrdinates.latitude > lamin && corrdinates.latitude < lamax && corrdinates.longitude > lomin && corrdinates.longitude < lomax
+                        select corrdinates).ToList();
+            });
         }
     } 
 
