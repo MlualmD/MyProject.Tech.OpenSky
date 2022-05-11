@@ -15,7 +15,7 @@ namespace Project.Tech.OpenSky.Entities
 
         public List<OpenSkyDetails> AllDataOpenSkeyDetails = new List<OpenSkyDetails>();
         public bool Running = true;
-
+        public DateTime datetime;
 
         public delegate void delOpenSky();
         public event delOpenSky HandlerEventOpenSkyUpdate;
@@ -23,8 +23,8 @@ namespace Project.Tech.OpenSky.Entities
 
         public delegate void StopAutoRunning();
         public event StopAutoRunning HandlerEventStopAutoRunning;
-
-
+      
+        
         public async Task<object[][]> GetFlightsDobleArrays()
         {
             Respones res = new Respones();
@@ -51,6 +51,7 @@ namespace Project.Tech.OpenSky.Entities
 
                        AllDataOpenSkeyDetails.Add(oneFligth);
                    }
+                   datetime = DateTime.Now;
                    HandlerEventOpenSkyUpdate();
                    Thread.Sleep(20000);
                }
@@ -91,42 +92,25 @@ namespace Project.Tech.OpenSky.Entities
         }
         public DateTime Time()
         {
-            return AllDataOpenSkeyDetails[0].Now;
+            return datetime;
         }
         public void StopRunning()
         {
             HandlerEventStopAutoRunning();
         }
-
-        public void Refersh(float lat, float lon)
+        public List<string> FindCountryWithCoordinates(float lamin, float lomin, float lamax, float lomax)
         {
+            List<string> Listcountry = new List<string>();
 
-            var lat_offset = 0.0008983152841195215;
-            var lon_offset = 0.001265559599380766;
-
-            var west_lat = lat;
-            var west_lon = lon - lon_offset;
-
-            var east_lat = lat;
-            var east_lon = lon + lon_offset;
-
-            var north_lat = lat + lat_offset;
-            var north_lon = lon;
-
-            var south_lat = lat - lat_offset;
-            var south_lon = lon;
-
-
+            foreach (OpenSkyDetails corrdinates in AllDataOpenSkeyDetails)
+            {
+                if(corrdinates.latitude > lamin && corrdinates.longitude<lomin && corrdinates.latitude > lamax && corrdinates.longitude < lomax)
+                {
+                    Listcountry.Add(corrdinates.origin_country);
+                }
+            }
+            return Listcountry;
         }
-        public static Boolean isWithin(float left, float right, float top, float buttom)
-        {
-            return left >= right &&
-                  top <= buttom &&
-                   buttom >= left &&
-                   right <= top;
-        }
-
-
-    }
+    } 
 
 }

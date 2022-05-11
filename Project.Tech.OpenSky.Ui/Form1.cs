@@ -154,7 +154,7 @@ namespace Project.Tech.OpenSky.Ui
 
         private void HttpHandlerUpdate()
         {
-            // לשאול את המרצה עם צריך INVOKE
+
             if (listView1.InvokeRequired)
             {
                 listView1.Invoke(new Action(() =>
@@ -191,7 +191,22 @@ namespace Project.Tech.OpenSky.Ui
             MessageBox.Show("Stopping The Program");
         }
 
+        private void Refresh_Click(object sender, EventArgs e)
+        {
+            float left = float.Parse(Left.Text);
+            float right = float.Parse(Right.Text);
+            float top = float.Parse(Top.Text);
+            float bouttm = float.Parse(Bouttm.Text);
+            List<string> nameCountry = request.FindCountryWithCoordinates(left, top, right, bouttm);
 
+            listView1.Clear();
+            listView1.View = View.Details;
+            listView1.Columns.Add("List Details", 100);
+            for (int i = 0; i < nameCountry.Count; i++)
+            {
+                listView1.Items.Add(new ListViewItem(new string[] { nameCountry[i] }));
+            }
+        }
     }
 
 }

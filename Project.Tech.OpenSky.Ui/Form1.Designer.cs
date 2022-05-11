@@ -44,6 +44,15 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.Left = new System.Windows.Forms.TextBox();
+            this.Right = new System.Windows.Forms.TextBox();
+            this.Top = new System.Windows.Forms.TextBox();
+            this.Bouttm = new System.Windows.Forms.TextBox();
+            this.Refresh = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -211,11 +220,103 @@
             this.label8.TabIndex = 16;
             this.label8.Text = "Last Update";
             // 
+            // Left
+            // 
+            this.Left.Location = new System.Drawing.Point(473, 507);
+            this.Left.Multiline = true;
+            this.Left.Name = "Left";
+            this.Left.Size = new System.Drawing.Size(63, 38);
+            this.Left.TabIndex = 17;
+            // 
+            // Right
+            // 
+            this.Right.Location = new System.Drawing.Point(700, 507);
+            this.Right.Multiline = true;
+            this.Right.Name = "Right";
+            this.Right.Size = new System.Drawing.Size(63, 38);
+            this.Right.TabIndex = 18;
+            // 
+            // Top
+            // 
+            this.Top.Location = new System.Drawing.Point(590, 507);
+            this.Top.Multiline = true;
+            this.Top.Name = "Top";
+            this.Top.Size = new System.Drawing.Size(63, 38);
+            this.Top.TabIndex = 19;
+            // 
+            // Bouttm
+            // 
+            this.Bouttm.Location = new System.Drawing.Point(814, 507);
+            this.Bouttm.Multiline = true;
+            this.Bouttm.Name = "Bouttm";
+            this.Bouttm.Size = new System.Drawing.Size(63, 38);
+            this.Bouttm.TabIndex = 20;
+            // 
+            // Refresh
+            // 
+            this.Refresh.Font = new System.Drawing.Font("Microsoft YaHei", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.Refresh.Location = new System.Drawing.Point(1016, 478);
+            this.Refresh.Name = "Refresh";
+            this.Refresh.Size = new System.Drawing.Size(248, 78);
+            this.Refresh.TabIndex = 21;
+            this.Refresh.Text = "Refresh";
+            this.Refresh.UseVisualStyleBackColor = true;
+            this.Refresh.Click += new System.EventHandler(this.Refresh_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(493, 468);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(23, 27);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "L";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(715, 468);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(26, 27);
+            this.label10.TabIndex = 23;
+            this.label10.Text = "R";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(610, 468);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(25, 27);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "T";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(833, 468);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(26, 27);
+            this.label12.TabIndex = 25;
+            this.label12.Text = "B";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1431, 602);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.Refresh);
+            this.Controls.Add(this.Bouttm);
+            this.Controls.Add(this.Top);
+            this.Controls.Add(this.Right);
+            this.Controls.Add(this.Left);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -257,6 +358,15 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox Left;
+        private System.Windows.Forms.TextBox Right;
+        private System.Windows.Forms.TextBox Top;
+        private System.Windows.Forms.TextBox Bouttm;
+        private System.Windows.Forms.Button Refresh;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
     }
 }
 
