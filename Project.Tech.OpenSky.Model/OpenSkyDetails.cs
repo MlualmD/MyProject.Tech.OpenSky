@@ -16,33 +16,14 @@ namespace Project.Tech.OpenSky.Model
 
         public DateTime Now;
 
-        public OpenSkyDetails()
-        {
-
-        }
         public OpenSkyDetails(object Id, object Origin_country, object Longitude, object Latitude, object Baro_altitude)
         {
             this.Now = DateTime.Now;
-
             icao24 = Id.ToString();
-
             origin_country = Origin_country.ToString();
-
-            if (Longitude != null)
-            {
-                longitude = float.Parse(Longitude.ToString()); ;
-            }
-
-            if (Latitude != null)
-            {
-                latitude = float.Parse(Latitude.ToString()); ;
-            }
-
-            if (Baro_altitude != null)
-            {
-                baro_altitude = float.Parse(Baro_altitude.ToString()); ;
-            }
-
+            longitude = Longitude != null ? float.Parse(Longitude.ToString()) : 0;
+            latitude = Latitude != null ? float.Parse(Latitude.ToString()) : 0;
+            baro_altitude = Baro_altitude != null ? float.Parse(Baro_altitude.ToString()) : 0;
         }
 
     }

@@ -13,17 +13,19 @@ namespace Project.Tech.OpenSky.Entities
     public class Request
     {
 
+        public List<OpenSkyDetails> AllDataOpenSkeyDetails = new List<OpenSkyDetails>();
+        public bool Running = true;
+
+
         public delegate void delOpenSky();
-        public event delOpenSky HandlerEventOpenSky;
+        public event delOpenSky HandlerEventOpenSkyUpdate;
+
 
         public delegate void StopAutoRunning();
         public event StopAutoRunning HandlerEventStopAutoRunning;
 
 
-        public List<OpenSkyDetails> AllDataOpenSkey = new List<OpenSkyDetails>();
-
-        public bool RunToStop = true;
-        public async Task<object[][]> GetFlyiesDetails()
+        public async Task<object[][]> GetFlightsDobleArrays()
         {
             Respones res = new Respones();
 
@@ -33,28 +35,23 @@ namespace Project.Tech.OpenSky.Entities
 
             return doubleArray;
         }
-
-
         public Task AutoRequset()
         {
             return Task.Factory.StartNew(async () =>
            {
-               RunToStop = true;
-               while (RunToStop)
+               Running = true;
+               while (Running)
                {
-                   object[][] statesData = await GetFlyiesDetails();
-
-                   OpenSkyModel openSkyModel = new OpenSkyModel(statesData);
-
-                   AllDataOpenSkey.Clear();
+                   object[][] statesData = await GetFlightsDobleArrays();
+                   AllDataOpenSkeyDetails.Clear();
                    foreach (var OneFlight in statesData)
                    {
 
                        OpenSkyDetails oneFligth = new OpenSkyDetails(OneFlight[0], OneFlight[2], OneFlight[5], OneFlight[6], OneFlight[7]);
 
-                       AllDataOpenSkey.Add(oneFligth);
+                       AllDataOpenSkeyDetails.Add(oneFligth);
                    }
-                   HandlerEventOpenSky();
+                   HandlerEventOpenSkyUpdate();
                    Thread.Sleep(20000);
                }
            });
@@ -62,63 +59,73 @@ namespace Project.Tech.OpenSky.Entities
         }
         public List<string> GetAllCountries()
         {
-
-            var CuntryName = AllDataOpenSkey.Select(s => s.origin_country).Distinct().ToList();
-
-            return CuntryName;
-
+            return AllDataOpenSkeyDetails.Select(s => s.origin_country).Distinct().ToList();
         }
         public int LengthCountries()
         {
-
-            var CuntryName = AllDataOpenSkey.Count();
-
-            return CuntryName;
-
+            return AllDataOpenSkeyDetails.Count();
         }
-        public List<OpenSkyDetails> LowsetFlighDetails()
+        public List<OpenSkyDetails> LowsetFlightDetails()
         {
-            List<OpenSkyDetails> details = AllDataOpenSkey;
-            List<OpenSkyDetails> LowsetFligh = details.OrderBy(s => s.baro_altitude).Take(1).ToList();
-            return LowsetFligh;
+            return AllDataOpenSkeyDetails.OrderBy(s => s.baro_altitude).Take(1).ToList();
         }
         public List<OpenSkyDetails> HighetFlightDetails()
         {
-            List<OpenSkyDetails> details = AllDataOpenSkey;
-            List<OpenSkyDetails> HighetFlight = details.OrderByDescending(s => s.baro_altitude).Take(1).ToList();
-            return HighetFlight;
+            return AllDataOpenSkeyDetails.OrderByDescending(s => s.baro_altitude).Take(1).ToList();
         }
         public List<string> FiveTopFlights()
         {
             List<string> FiveTop = new List<string>();
-            var recentFiveForEachName = AllDataOpenSkey;
-            var group = (from nameCountry in AllDataOpenSkey
+            var group = (from nameCountry in AllDataOpenSkeyDetails
                          group nameCountry by nameCountry.origin_country into cg
                          select new
                          {
-                             City = cg.Key,
-                             NumberOfCompanies = cg.Count()
-                         }).OrderByDescending(x => x.NumberOfCompanies).Distinct().Take(5).ToList();
+                             Country = cg.Key,
+                             NumberOfFlights = cg.Count()
+                         }).OrderByDescending(x => x.NumberOfFlights).Take(5).ToList();
             foreach (var item in group)
             {
-                FiveTop.Add(item.City);
+                FiveTop.Add(item.Country);
             }
             return FiveTop;
         }
         public DateTime Time()
         {
-            for (int i = 0; i < AllDataOpenSkey.Count;)
-            {
-                var time = AllDataOpenSkey[i].Now;
-                return time;
-
-            }
-            return DateTime.Now;
+            return AllDataOpenSkeyDetails[0].Now;
         }
         public void StopRunning()
         {
             HandlerEventStopAutoRunning();
         }
+
+        public void Refersh(float lat, float lon)
+        {
+
+            var lat_offset = 0.0008983152841195215;
+            var lon_offset = 0.001265559599380766;
+
+            var west_lat = lat;
+            var west_lon = lon - lon_offset;
+
+            var east_lat = lat;
+            var east_lon = lon + lon_offset;
+
+            var north_lat = lat + lat_offset;
+            var north_lon = lon;
+
+            var south_lat = lat - lat_offset;
+            var south_lon = lon;
+
+
+        }
+        public static Boolean isWithin(float left, float right, float top, float buttom)
+        {
+            return left >= right &&
+                  top <= buttom &&
+                   buttom >= left &&
+                   right <= top;
+        }
+
 
     }
 

@@ -12,11 +12,9 @@ namespace Project.Tech.OpenSky.Model
         public OpenSkyModel(object[][] states)
         {
             this.states = states;
-
-
         }
 
-        public int time { get; set; }
+       
         public object[][] states { get; set; }
 
 
